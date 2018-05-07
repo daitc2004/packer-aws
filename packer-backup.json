@@ -1,0 +1,43 @@
+{
+  "variables": {
+    "base_ami":"ami-10375468",
+    "instance_type":"t2.micro",
+    "vpc_id":"vpc-1a82da7d",
+    "subnet_id":"subnet-46951c0f",
+    "security_group_id": "sg-ec869296",
+    "region": "us-west-2"
+  },
+  "builders": [{
+    "type": "amazon-ebs",
+    "access_key": "{{user `access_key`}}",
+    "secret_key": "{{user `secret_key`}}",
+    "region": "{{user `region`}}",
+    "source_ami": "{{user `base_ami`}}",
+    "security_group_ids": [
+      "{{user `security_group_id`}}"
+    ],
+    "instance_type": "{{user `instance_type`}}",
+    "vpc_id": "{{user `vpc_id`}}",
+    "subnet_id": "{{user `subnet_id`}}",
+    "user_data_file":"userdata/windows-winrm.ps1",
+    "tags": {
+      "OS_Version": "Windows_Server_2012"
+      },
+    "communicator": "winrm",
+    "winrm_username": "Admin_ansible",
+    "winrm_password":"1@345Qwert",
+    "winrm_use_ssl": true,
+    "winrm_insecure": true,
+    "winrm_timeout":"120m",
+	  "ami_name": "Windows Base Image-{{timestamp | clean_ami_name}}",
+    "ami_users": "330683193150",
+    "associate_public_ip_address": "true",
+    "launch_block_device_mappings": [{
+      "device_name": "/dev/sda1",
+      "volume_size": 30,
+      "volume_type": "gp2",
+      "iops": "100",
+      "delete_on_termination": true
+    }]
+  }]
+  }
